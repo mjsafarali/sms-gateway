@@ -15,9 +15,15 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file path")
+	rootCmd.PersistentFlags().StringVar(
+		&cfgFile,
+		"config",
+		"",
+		"config file path",
+	)
 
 	rootCmd.AddCommand(serveCmd)
+	rootCmd.AddCommand(migrateCmd)
 }
 
 func preRun(_ *cobra.Command, _ []string) {
