@@ -4,26 +4,25 @@ import (
 	"api-gateway/internal/config"
 	"fmt"
 	"github.com/spf13/cobra"
-	"log"
 	"os"
 )
 
+var cfgFile string
 var rootCmd = &cobra.Command{
-	Use:   "api-gateway",
-	Short: "The api-gateway Service!",
+	Use:              "api-gateway",
+	Short:            "The api-gateway Service!",
+	PersistentPreRun: preRun,
 }
 
-func initConfig() {
-	configPath, err := rootCmd.Flags().GetString("config")
-	if err != nil {
-		log.Fatalf("cant get config path: %s", err)
-	}
+func init() {
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file path")
 
+	rootCmd.AddCommand(serveCmd)
+}
+
+func preRun(_ *cobra.Command, _ []string) {
 	// Load config file
-	config.Init(configPath)
-
-	logLevel := config.GetInt("LOGGER.LEVEL")
-	log.SetLevel(log.Level(logLevel))
+	config.Init(cfgFile)
 }
 
 func Execute() {

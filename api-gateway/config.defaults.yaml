@@ -1,4 +1,4 @@
-App:
+APP:
   ENVIRONMENT: development
 
 TIMEZONE: Asia/Tehran
@@ -6,8 +6,8 @@ LOCATION: Asia/Tehran
 
 LOGGER:
   LEVEL: info
-  STDOUT_LOG_LEVEL:
-  ELK_LOG_LEVEL:
+  STDOUT_LOG_LEVEL: 0
+  ELK_LOG_LEVEL: 0
   PATH: ./logs
 
 HTTP_SERVER:
@@ -19,27 +19,24 @@ HTTP_SERVER:
 
 DATABASE:
   DRIVER: mysql
-  HOST: mysql-central
+  HOST: 127.0.0.1
   PORT: 3306
   NAME: app
   USER: root
-  PASSWORD: qJ9qEbAIWDL5Ytp8
-  MAX_CONN: 10
-  IDLE_CONN: 5
-  TIMEOUT: 3s
+  PASSWORD: password
+  DIAL_TIMEOUT: 5s
+  DIAL_RETRY: 3
+  MAX_CONN: 100
+  MAX_IDLE: 10
+  IDLE_CONN: 10
 
 REDIS:
-  HOST: redis-central
+  HOST: 127.0.0.1
   PORT: 6379
   DB: 0
   USERNAME: ""
   PASSWORD: ""
-  MaxRetries: 3
-  PoolSize: 10
-  DialTimeout: 5s
-  ReadTimeout: 2s
-  WriteTimeout: 2s
-  PoolTimeout: 3s
+  DIAL_TIMEOUT: 5s
 
 NATS:
   AUTH_ENABLED: true
@@ -47,14 +44,9 @@ NATS:
   PORT: 4222
   CONNECT_WAIT: 1s
   DIAL_TIMEOUT: 2s
-  FLUSH_TIMEOUTt: 2s
-  FLUSHER_TIMEOUTt: 250ms
+  FLUSH_TIMEOUT: 2s
+  FLUSHER_TIMEOUT: 250ms
   PING_INTERVAL: 10s
-  CONNECT_BUF_SIZR: 8421376
+  CONNECT_BUF_SIZE: 8421376
   MAX_CHAN_LEN: 8192
   MAX_PING_OUT: 5
-  MAX_RECONNECT: 60
-  CLUSTER_ID: sms-gateway
-  CLIENT_NAME: api-gateway
-  USERNAME:
-  PASSWORD:
