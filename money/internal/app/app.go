@@ -1,17 +1,16 @@
 package app
 
 import (
-	"api-gateway/internal/config"
-	"api-gateway/internal/repositories"
-	"api-gateway/log"
 	"context"
+	"money/internal/config"
+	"money/log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	goredis "github.com/go-redis/redis/v8"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // MySQL driver
 	"github.com/jmoiron/sqlx"
 )
 
@@ -110,5 +109,5 @@ func WithRedis() {
 
 // WithRepositories initializes the repositories
 func WithRepositories() {
-	repositories.Companies = repositories.NewMysqlCompanyRepo(A.DB)
+	//
 }

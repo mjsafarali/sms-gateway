@@ -11,6 +11,7 @@ type (
 		HTTPServer HTTPServer     `yaml:"HTTP_SERVER"`
 		Database   Database       `yaml:"DATABASE" json:"database"`
 		Redis      Redis          `yaml:"REDIS"`
+		//Nats       Nats           `yaml:"NATS"`
 	}
 
 	App struct {
@@ -54,4 +55,23 @@ type (
 		Password    string        `yaml:"PASSWORD"`
 		DialTimeout time.Duration `yaml:"DIAL_TIMEOUT"`
 	}
+
+	//Nats struct {
+	//	AuthEnabled    bool          `yaml:"AUTH_ENABLED" validate:"boolean"`
+	//	Host           string        `yaml:"HOST"`
+	//	Port           string        `yaml:"PORT"`
+	//	ConnectWait    time.Duration `yaml:"CONNECT_WAIT"`
+	//	DialTimeout    time.Duration `yaml:"DIAL_TIMEOUT"`
+	//	FlushTimeout   time.Duration `yaml:"FLUSH_TIMEOUTt"`
+	//	FlusherTimeout time.Duration `yaml:"FLUSHER_TIMEOUTt"`
+	//	PingInterval   time.Duration `yaml:"PING_INTERVAL"`
+	//	ConnectBufSize int           `yaml:"CONNECT_BUF_SIZR"`
+	//	MaxChanLen     int           `yaml:"MAX_CHAN_LEN"`
+	//	MaxPingOut     int           `yaml:"MAX_PING_OUT"`
+	//	MaxReconnect   int           `yaml:"MAX_RECONNECT"`
+	//	ClusterID      string        `yaml:"CLUSTER_ID"`
+	//	ClientName     string        `yaml:"CLIENT_NAME"`
+	//	Username       string        `yaml:"USERNAME"`
+	//	Password       string        `yaml:"PASSWORD"`
+	//}
 )

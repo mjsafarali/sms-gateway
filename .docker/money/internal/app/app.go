@@ -11,7 +11,7 @@ import (
 	"time"
 
 	goredis "github.com/go-redis/redis/v8"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // MySQL driver
 	"github.com/jmoiron/sqlx"
 )
 
