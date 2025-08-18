@@ -37,6 +37,9 @@ func NewServer() *Server {
 func (s *Server) Serve() {
 	s.e.GET("/", v1Handlers.Index)
 
+	apiV1 := s.e.Group("/api/v1")
+	apiV1.GET("/companies", v1Handlers.CompaniesIndex)
+
 	go func() {
 		<-app.A.Ctx.Done()
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
