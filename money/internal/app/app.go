@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"money/internal/config"
+	"money/internal/repositories"
 	"money/log"
 	"os"
 	"os/signal"
@@ -10,7 +11,7 @@ import (
 	"time"
 
 	goredis "github.com/go-redis/redis/v8"
-	_ "github.com/go-sql-driver/mysql" // MySQL driver
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -109,5 +110,6 @@ func WithRedis() {
 
 // WithRepositories initializes the repositories
 func WithRepositories() {
-	//
+	repositories.Wallets = repositories.NewMysqlWallet(A.DB)
+	repositories.Transactions = repositories.NewMysqlTransaction(A.DB)
 }

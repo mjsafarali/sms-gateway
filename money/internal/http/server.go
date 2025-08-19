@@ -5,7 +5,8 @@ import (
 	"errors"
 	"money/internal/app"
 	"money/internal/config"
-	v1Handlers "money/internal/http/handlers/v1"
+	v1 "money/internal/http/handlers/v1"
+	"money/internal/validator"
 	"net/http"
 	"time"
 
@@ -26,6 +27,7 @@ func NewServer() *Server {
 	e.Server.WriteTimeout = config.Cfg.HTTPServer.WriteTimeout
 	e.Server.ReadHeaderTimeout = config.Cfg.HTTPServer.ReadHeaderTimeout
 	e.Server.IdleTimeout = config.Cfg.HTTPServer.IdleTimeout
+	e.Validator = validator.New()
 
 	return &Server{
 		e: e,
@@ -35,9 +37,9 @@ func NewServer() *Server {
 // Serve starts the echo server and listens on the configured port and
 // use middlewares for logging, metrics, tracing and locale
 func (s *Server) Serve() {
-	s.e.GET("/", v1Handlers.Index)
-
-	//apiV1 := s.e.Group("/api/v1")
+	apiV1 := s.e.Group("/api/v1/wallet")
+	apiV1.GET("/balance/:company_id", v1.Balance)
+	apiV1.POST("/apply", v1.Apply)
 
 	go func() {
 		<-app.A.Ctx.Done()
