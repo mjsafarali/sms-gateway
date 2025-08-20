@@ -17,7 +17,7 @@ func NewMysqlCompanyRepo(db *sqlx.DB) *MysqlCompanyRepo {
 }
 
 func (r *MysqlCompanyRepo) GetAllCompanies(ctx context.Context) ([]models.Company, error) {
-	rows, err := r.db.QueryContext(ctx, `SELECT * FROM companies ORDER BY id`)
+	rows, err := r.db.QueryContext(ctx, `SELECT * FROM companies ORDER BY id DESC`)
 	if err != nil {
 		return nil, err
 	}
