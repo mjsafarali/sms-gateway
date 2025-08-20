@@ -35,8 +35,7 @@ func Balance(c echo.Context) (err error) {
 	}
 
 	return c.JSON(200, map[string]interface{}{
-		"company_id": companyID,
-		"balance":    balance,
+		"balance": balance,
 	})
 }
 

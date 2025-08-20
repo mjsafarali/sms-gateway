@@ -6,13 +6,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+var svc *services.CompanyService
+
 func Index(c echo.Context) (err error) {
 	return c.JSON(200, map[string]string{
 		"message": "ok",
 	})
 }
-
-var svc *services.CompanyService
 
 // CompaniesIndex handles the request to get all companies.
 func CompaniesIndex(c echo.Context) (err error) {
