@@ -4,6 +4,7 @@ import (
 	"api-gateway/internal/app"
 	"api-gateway/internal/config"
 	v1Handlers "api-gateway/internal/http/handlers/v1"
+	"api-gateway/internal/validator"
 	"context"
 	"errors"
 	"net/http"
@@ -26,6 +27,7 @@ func NewServer() *Server {
 	e.Server.WriteTimeout = config.Cfg.HTTPServer.WriteTimeout
 	e.Server.ReadHeaderTimeout = config.Cfg.HTTPServer.ReadHeaderTimeout
 	e.Server.IdleTimeout = config.Cfg.HTTPServer.IdleTimeout
+	e.Validator = validator.New()
 
 	return &Server{
 		e: e,
@@ -33,12 +35,9 @@ func NewServer() *Server {
 }
 
 // Serve starts the echo server and listens on the configured port and
-// use middlewares for logging, metrics, tracing and locale
 func (s *Server) Serve() {
-	s.e.GET("/", v1Handlers.Index)
-
-	apiV1 := s.e.Group("/api/v1")
-	apiV1.GET("/companies", v1Handlers.CompaniesIndex)
+	apiV1sms := s.e.Group("/api/v1/sms")
+	apiV1sms.POST("/send", v1Handlers.SendSMS)
 
 	go func() {
 		<-app.A.Ctx.Done()

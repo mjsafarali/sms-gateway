@@ -2,7 +2,6 @@ package app
 
 import (
 	"api-gateway/internal/config"
-	"api-gateway/internal/repositories"
 	"api-gateway/log"
 	"context"
 	"os"
@@ -110,5 +109,5 @@ func WithRedis() {
 
 // WithRepositories initializes the repositories
 func WithRepositories() {
-	repositories.Companies = repositories.NewMysqlCompanyRepo(A.DB)
+
 }
