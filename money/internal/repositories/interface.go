@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"api-gateway/internal/models"
 	"errors"
-	"money/internal/models"
 )
 
 var (

@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"api-gateway/internal/models"
 	"github.com/jmoiron/sqlx"
-	"money/internal/models"
 )
 
 type MysqlWallet struct {

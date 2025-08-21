@@ -1,6 +1,6 @@
 package main
 
-import "money/cmd"
+import "api-gateway/cmd"
 
 func main() {
 	cmd.Execute()

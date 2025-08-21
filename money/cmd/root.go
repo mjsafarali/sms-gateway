@@ -1,16 +1,16 @@
 package cmd
 
 import (
+	"api-gateway/internal/config"
 	"fmt"
 	"github.com/spf13/cobra"
-	"money/internal/config"
 	"os"
 )
 
 var cfgFile string
 var rootCmd = &cobra.Command{
-	Use:              "money",
-	Short:            "The money Service!",
+	Use:              "api-gateway",
+	Short:            "The api-gateway Service!",
 	PersistentPreRun: preRun,
 }
 

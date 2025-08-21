@@ -1,17 +1,18 @@
 package v1
 
 import (
+	"api-gateway/internal/repositories"
+	"api-gateway/internal/services"
+	"api-gateway/log"
 	"errors"
 	"github.com/labstack/echo/v4"
-	"money/internal/repositories"
-	"money/internal/services"
-	"money/log"
 	"strconv"
 )
 
 var svc *services.WalletService
 
-func Balance(c echo.Context) (err error) {
+// WalletBalance handles the request to get a company's wallet balance.
+func WalletBalance(c echo.Context) (err error) {
 	companyID := c.Param("company_id")
 	if companyID == "" {
 		return c.JSON(400, map[string]string{"error": "company_id is required"})
@@ -48,8 +49,8 @@ type IncreaseWalletRequest struct {
 	IdempotencyKey string `json:"idempotency_key" validate:"required"`
 }
 
-// Apply handles the request to increase or decrease a company's wallet balance.
-func Apply(c echo.Context) (err error) {
+// WalletApply Apply handles the request to increase or decrease a company's wallet balance.
+func WalletApply(c echo.Context) (err error) {
 	req := new(IncreaseWalletRequest)
 	if err = c.Bind(req); err != nil {
 		return c.JSON(400, map[string]string{"error": "invalid request"})

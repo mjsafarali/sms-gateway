@@ -1,12 +1,12 @@
 package cmd
 
 import (
+	"api-gateway/internal/app"
+	"api-gateway/internal/config"
+	"api-gateway/log"
 	"context"
 	"errors"
 	"fmt"
-	"money/internal/app"
-	"money/internal/config"
-	"money/log"
 	"os"
 	"path/filepath"
 	"strings"

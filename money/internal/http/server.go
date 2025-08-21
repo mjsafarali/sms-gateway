@@ -1,12 +1,12 @@
 package http
 
 import (
+	"api-gateway/internal/app"
+	"api-gateway/internal/config"
+	v1Handlers "api-gateway/internal/http/handlers/v1"
+	"api-gateway/internal/validator"
 	"context"
 	"errors"
-	"money/internal/app"
-	"money/internal/config"
-	v1 "money/internal/http/handlers/v1"
-	"money/internal/validator"
 	"net/http"
 	"time"
 
@@ -35,11 +35,10 @@ func NewServer() *Server {
 }
 
 // Serve starts the echo server and listens on the configured port and
-// use middlewares for logging, metrics, tracing and locale
 func (s *Server) Serve() {
-	apiV1 := s.e.Group("/api/v1/wallet")
-	apiV1.GET("/balance/:company_id", v1.Balance)
-	apiV1.POST("/apply", v1.Apply)
+	apiV1wallet := s.e.Group("/api/v1")
+	apiV1wallet.GET("/balance/:company_id", v1Handlers.WalletBalance)
+	apiV1wallet.POST("/apply", v1Handlers.WalletApply)
 
 	go func() {
 		<-app.A.Ctx.Done()

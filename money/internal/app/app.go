@@ -1,10 +1,10 @@
 package app
 
 import (
+	"api-gateway/internal/config"
+	"api-gateway/internal/repositories"
+	"api-gateway/log"
 	"context"
-	"money/internal/config"
-	"money/internal/repositories"
-	"money/log"
 	"os"
 	"os/signal"
 	"syscall"

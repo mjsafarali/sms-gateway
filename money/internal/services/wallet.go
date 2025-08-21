@@ -1,10 +1,10 @@
 package services
 
 import (
+	"api-gateway/internal/models"
+	"api-gateway/internal/repositories"
 	"database/sql"
 	"errors"
-	"money/internal/models"
-	"money/internal/repositories"
 	"time"
 )
 
