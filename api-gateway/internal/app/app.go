@@ -141,6 +141,7 @@ func WithNats() {
 // WithRepositories initializes the repositories
 func WithRepositories() {
 	repositories.RedisRepository = repositories.NewRedis(A.RedisClient)
+	repositories.Messages = repositories.NewMessagesRepository(A.DB)
 }
 
 // WithServices initializes the services

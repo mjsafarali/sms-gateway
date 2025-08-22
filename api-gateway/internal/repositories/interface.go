@@ -11,4 +11,9 @@ var (
 	ErrInsufficient  = errors.New("decrement would go below zero")
 
 	RedisRepository *RedisRepo
+	Messages        MessagesRepository
 )
+
+type MessagesRepository interface {
+	CreateMessage(companyID int64, receiver string, content string) error
+}

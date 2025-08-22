@@ -50,6 +50,10 @@ func (s *SmsService) SendSMS(ctx context.Context, companyID int64, message, rece
 		return err
 	}
 
+	if err = repositories.Messages.CreateMessage(companyID, receiver, message); err != nil {
+		return err
+	}
+
 	return nil
 }
 
