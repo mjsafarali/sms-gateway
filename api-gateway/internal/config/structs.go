@@ -9,7 +9,6 @@ type (
 		Location   string         `yaml:"LOCATION"`
 		Logger     Logger         `yaml:"LOGGER"`
 		HTTPServer HTTPServer     `yaml:"HTTP_SERVER"`
-		Database   Database       `yaml:"DATABASE" json:"database"`
 		Database   Database       `yaml:"DATABASE"`
 		Nats       Nats           `yaml:"NATS"`
 		Redis      Redis          `yaml:"REDIS"`
@@ -56,6 +55,17 @@ type (
 		Password    string        `yaml:"PASSWORD"`
 		DialTimeout time.Duration `yaml:"DIAL_TIMEOUT"`
 	}
+
+	SMS struct {
+		EachMessagePrice int64 `yaml:"EACH_MESSAGE_PRICE"`
+	}
+
+	Wallet struct {
+		Host    string        `yaml:"HOST"`
+		Port    string        `yaml:"PORT"`
+		Timeout time.Duration `yaml:"TIMEOUT"`
+	}
+
 	Nats struct {
 		Address        string        `yaml:"ADDRESS"`
 		ConnectWait    time.Duration `yaml:"CONNECT_WAIT"`

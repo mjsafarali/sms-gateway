@@ -15,6 +15,7 @@ var serveCmd = &cobra.Command{
 func startFunc(_ *cobra.Command, _ []string) {
 	app.WithGracefulShutdown()
 	app.WithDatabase()
+	app.WithRedis()
 	app.WithNats()
 	app.WithRepositories()
 	app.WithRedis()
