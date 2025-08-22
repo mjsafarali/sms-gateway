@@ -40,21 +40,5 @@ services:
     networks:
       - sms_gateway
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma
-    links:
-      - mysql-central
-    environment:
-      PMA_HOST: mysql-central
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-      UPLOAD_LIMIT: 300M
-    restart: always
-    ports:
-      - "8081:80"
-    networks:
-      - sms_gateway
-
 networks:
   sms_gateway:
