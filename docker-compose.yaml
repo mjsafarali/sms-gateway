@@ -86,5 +86,15 @@ services:
     networks:
       - sms_gateway
 
+  api-gateway-migrate:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-central
+    entrypoint: [ "./api-gateway", "migrate" ]
+    networks:
+      - sms_gateway
+
 networks:
   sms_gateway:
