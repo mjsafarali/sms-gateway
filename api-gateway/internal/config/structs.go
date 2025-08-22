@@ -10,6 +10,8 @@ type (
 		Logger     Logger         `yaml:"LOGGER"`
 		HTTPServer HTTPServer     `yaml:"HTTP_SERVER"`
 		Database   Database       `yaml:"DATABASE" json:"database"`
+		Database   Database       `yaml:"DATABASE"`
+		Nats       Nats           `yaml:"NATS"`
 		Redis      Redis          `yaml:"REDIS"`
 	}
 
@@ -53,5 +55,16 @@ type (
 		Username    string        `yaml:"USERNAME"`
 		Password    string        `yaml:"PASSWORD"`
 		DialTimeout time.Duration `yaml:"DIAL_TIMEOUT"`
+	}
+	Nats struct {
+		Address        string        `yaml:"ADDRESS"`
+		ConnectWait    time.Duration `yaml:"CONNECT_WAIT"`
+		DialTimeout    time.Duration `yaml:"DIAL_TIMEOUT"`
+		FlushTimeout   time.Duration `yaml:"FLUSH_TIMEOUT"`
+		FlusherTimeout time.Duration `yaml:"FLUSHER_TIMEOUT"`
+		PingInterval   time.Duration `yaml:"PING_INTERVAL"`
+		ConnectBufSize int           `yaml:"CONNECT_BUFFER_SIZE"`
+		MaxChanLen     int           `yaml:"MAX_CHAN_LENGTH"`
+		MaxPingOut     int           `yaml:"MAX_PING_OUT"`
 	}
 )
