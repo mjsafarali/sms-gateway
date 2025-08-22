@@ -23,11 +23,9 @@ func init() {
 	)
 
 	rootCmd.AddCommand(serveCmd)
-	rootCmd.AddCommand(migrateCmd)
 }
 
 func preRun(_ *cobra.Command, _ []string) {
-	// Load config file
 	config.Init(cfgFile)
 }
 

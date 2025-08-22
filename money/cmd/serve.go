@@ -17,6 +17,7 @@ func startFunc(_ *cobra.Command, _ []string) {
 	app.WithDatabase()
 	app.WithRepositories()
 	app.WithRedis()
+	app.WithServices()
 
 	internalHttp.NewServer().Serve()
 }

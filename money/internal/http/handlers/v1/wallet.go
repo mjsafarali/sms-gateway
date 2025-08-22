@@ -3,13 +3,10 @@ package v1
 import (
 	"api-gateway/internal/repositories"
 	"api-gateway/internal/services"
-	"api-gateway/log"
 	"errors"
 	"github.com/labstack/echo/v4"
 	"strconv"
 )
-
-var svc *services.WalletService
 
 // WalletBalance handles the request to get a company's wallet balance.
 func WalletBalance(c echo.Context) (err error) {
@@ -23,15 +20,8 @@ func WalletBalance(c echo.Context) (err error) {
 		return c.JSON(400, map[string]string{"error": "invalid company_id"})
 	}
 
-	if svc == nil {
-		svc = services.NewWalletService(repositories.Wallets, repositories.Transactions)
-	}
-
-	balance, err := svc.GetBalanceByCompanyID(cid)
+	balance, err := services.WalletServiceInstance.GetBalanceByCompanyID(cid)
 	if err != nil {
-		if errors.Is(err, repositories.ErrWalletNotFound) {
-			return c.JSON(404, map[string]string{"error": "wallet not found"})
-		}
 		return c.JSON(500, map[string]string{"error": "internal server error"})
 	}
 
@@ -41,12 +31,9 @@ func WalletBalance(c echo.Context) (err error) {
 }
 
 type IncreaseWalletRequest struct {
-	CompanyID      int64  `json:"company_id" validate:"required"`
-	Amount         int64  `json:"amount" validate:"required"`
-	Action         string `json:"action" validate:"required,oneof=CREDIT DEBIT"`
-	RefType        string `json:"ref_type" validate:"required"`
-	RefID          int64  `json:"ref_id" validate:"required"`
-	IdempotencyKey string `json:"idempotency_key" validate:"required"`
+	CompanyID int64  `json:"company_id" validate:"required"`
+	Amount    int64  `json:"amount" validate:"required"`
+	Action    string `json:"action" validate:"required,oneof=CREDIT DEBIT"`
 }
 
 // WalletApply Apply handles the request to increase or decrease a company's wallet balance.
@@ -57,28 +44,17 @@ func WalletApply(c echo.Context) (err error) {
 	}
 
 	if err = c.Validate(req); err != nil {
-		log.Info(err.Error())
 		return c.JSON(400, map[string]string{"error": "validation failed"})
 	}
 
-	if svc == nil {
-		svc = services.NewWalletService(repositories.Wallets, repositories.Transactions)
-	}
-
 	if req.Action == "CREDIT" {
-		if err = svc.IncreaseWalletBalance(req.CompanyID, req.Amount, req.RefType, req.RefID, req.IdempotencyKey); err != nil {
-			if errors.Is(err, repositories.ErrTrxExists) {
-				return c.JSON(422, map[string]string{"error": "transaction already exists"})
-			}
+		if err = services.WalletServiceInstance.IncreaseWalletBalance(req.CompanyID, req.Amount); err != nil {
 			return c.JSON(500, map[string]string{"error": "internal server error"})
 		}
-	} else if req.Action == "DEBIT" {
-		if err = svc.DecreaseWalletBalance(req.CompanyID, req.Amount, req.RefType, req.RefID, req.IdempotencyKey); err != nil {
+	} else {
+		if err = services.WalletServiceInstance.DecreaseWalletBalance(req.CompanyID, req.Amount); err != nil {
 			if errors.Is(err, repositories.ErrNoEnoughBalance) {
 				return c.JSON(422, map[string]string{"error": "not enough balance"})
-			}
-			if errors.Is(err, repositories.ErrTrxExists) {
-				return c.JSON(422, map[string]string{"error": "transaction already exists"})
 			}
 			return c.JSON(500, map[string]string{"error": "internal server error"})
 		}

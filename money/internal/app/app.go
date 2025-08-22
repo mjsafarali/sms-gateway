@@ -3,6 +3,7 @@ package app
 import (
 	"api-gateway/internal/config"
 	"api-gateway/internal/repositories"
+	"api-gateway/internal/services"
 	"api-gateway/log"
 	"context"
 	"os"
@@ -110,6 +111,9 @@ func WithRedis() {
 
 // WithRepositories initializes the repositories
 func WithRepositories() {
-	repositories.Wallets = repositories.NewMysqlWallet(A.DB)
 	repositories.Transactions = repositories.NewMysqlTransaction(A.DB)
+}
+
+func WithServices() {
+	services.WalletServiceInstance = services.NewWalletService(repositories.Transactions)
 }
