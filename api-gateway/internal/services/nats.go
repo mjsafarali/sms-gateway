@@ -1,35 +1,35 @@
 package services
 
 import (
-	"errors"
+	"context"
+	"encoding/json"
 	"github.com/nats-io/nats.go"
 )
 
-type Nats struct {
-	jsc nats.JetStreamContext
+type NatsPublisher struct {
+	js nats.JetStreamContext
 }
 
-func NewNatsService(jsc nats.JetStreamContext) *Nats {
-	return &Nats{
-		jsc: jsc,
+func NewNatsPublisher(js nats.JetStreamContext) *NatsPublisher {
+	return &NatsPublisher{
+		js: js,
 	}
 }
 
-func (n *Nats) AddStream(name string, subjects []string) error {
-	_, err := n.jsc.AddStream(&nats.StreamConfig{
-		Name:     name,
-		Subjects: subjects,
-	})
-	if err != nil && !errors.Is(err, nats.ErrStreamNameAlreadyInUse) {
+func (n *NatsPublisher) Publish(ctx context.Context, msg Msg) error {
+	if _, err := n.js.AddStream(
+		&nats.StreamConfig{
+			Name:     "SMS",
+			Subjects: []string{"sms.*"},
+		}); err != nil {
+	}
+
+	jm, err := json.Marshal(msg)
+	if err != nil {
 		return err
 	}
 
-	return nil
-}
-
-func (n *Nats) Publish(subject string, data []byte) error {
-	_, err := n.jsc.Publish(subject, data)
-	if err != nil {
+	if _, err := n.js.Publish("sms.send", jm); err != nil {
 		return err
 	}
 

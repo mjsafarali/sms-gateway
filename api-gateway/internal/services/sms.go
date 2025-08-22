@@ -5,69 +5,74 @@ import (
 	"api-gateway/internal/repositories"
 	"context"
 	"errors"
-	"fmt"
 	"github.com/go-redis/redis/v8"
-	"strconv"
 	"time"
 )
 
-type Sms struct {
+type SmsService struct {
+	pub Publisher
 }
 
-func NewSmsService() *Sms {
-	return &Sms{}
+func NewSmsService(pub Publisher) *SmsService {
+	return &SmsService{
+		pub: pub,
+	}
 }
 
-func (s *Sms) SendSMS(ctx context.Context, companyID int64, message, receiver string) error {
+func (s *SmsService) SendSMS(ctx context.Context, companyID int64, message, receiver string) error {
 	var balance int64
 	price := config.Cfg.SMS.EachMessagePrice
-	balanceKey := fmt.Sprintf("company:%s:balance", strconv.Itoa(int(companyID)))
 
-	balance, err := repositories.RedisRepository.GetInt64(ctx, balanceKey)
-	if err != nil && !errors.Is(err, redis.Nil) {
+	balance, err := s.getBalance(ctx, companyID)
+	if err != nil {
 		return err
-	}
-
-	if errors.Is(err, redis.Nil) {
-		dbBalance, err := Wallets.GetBalance(companyID)
-		if err != nil {
-			return err
-		}
-
-		ok, _ := repositories.RedisRepository.SetNX(ctx, balanceKey, dbBalance)
-		if !ok {
-			balance, _ = repositories.RedisRepository.GetInt64(ctx, balanceKey)
-		} else {
-			balance = dbBalance
-		}
 	}
 
 	if balance < price {
 		return repositories.ErrInsufficient
 	}
 
-	if _, err = repositories.RedisRepository.DecrByNoNegative(ctx, balanceKey, price); err != nil {
+	if _, err = repositories.RedisRepository.DecrByNoNegative(ctx, companyID, price); err != nil {
 		return err
 	}
 
-	if err = NatsSrv.AddStream("SMS", []string{"sms.*"}); err != nil {
-		if _, err = repositories.RedisRepository.IncrBy(ctx, balanceKey, price); err != nil {
-			return err
-		}
-		return err
+	msg := Msg{
+		CompanyID: companyID,
+		Content:   message,
+		Receiver:  receiver,
+		timestamp: time.Now(),
+		Price:     price,
 	}
-
-	msg := fmt.Sprintf(
-		`{"company_id":%d,"message":"%s","receiver":"%s","timestamp":%d,"price":%d}`,
-		companyID, message, receiver, time.Now().UnixMilli(), price,
-	)
-	err = NatsSrv.Publish("sms.send", []byte(msg))
-	if err != nil {
-		if _, err = repositories.RedisRepository.IncrBy(ctx, balanceKey, price); err != nil {
+	if err = s.pub.Publish(ctx, msg); err != nil {
+		if _, err = repositories.RedisRepository.IncrBy(ctx, companyID, price); err != nil {
 			return err
 		}
 		return err
 	}
 
 	return nil
+}
+
+func (s *SmsService) getBalance(ctx context.Context, companyID int64) (int64, error) {
+
+	balance, err := repositories.RedisRepository.GetInt64(ctx, companyID)
+	if err != nil && !errors.Is(err, redis.Nil) {
+		return 0, err
+	}
+
+	if errors.Is(err, redis.Nil) {
+		dbBalance, err := Wallets.GetBalance(companyID)
+		if err != nil {
+			return 0, err
+		}
+
+		ok, _ := repositories.RedisRepository.SetNX(ctx, companyID, dbBalance)
+		if !ok {
+			balance, _ = repositories.RedisRepository.GetInt64(ctx, companyID)
+		} else {
+			balance = dbBalance
+		}
+	}
+
+	return balance, nil
 }

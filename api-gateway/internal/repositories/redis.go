@@ -2,29 +2,30 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 )
 
-type Redis struct {
-	rdb *redis.Client
+type RedisRepo struct {
+	Rdb *redis.Client
 }
 
-func NewRedis(rdb *redis.Client) *Redis {
-	return &Redis{
-		rdb: rdb,
+func NewRedis(rdb *redis.Client) *RedisRepo {
+	return &RedisRepo{
+		Rdb: rdb,
 	}
 }
 
-func (r *Redis) GetInt64(ctx context.Context, key string) (int64, error) {
-	k := RedisPrefix + key
-	val, err := r.rdb.Get(ctx, k).Int64()
+func (r *RedisRepo) GetInt64(ctx context.Context, companyID int64) (int64, error) {
+	k := RedisPrefix + key(companyID)
+	val, err := r.Rdb.Get(ctx, k).Int64()
 
 	return val, err
 }
 
-func (r *Redis) SetNX(ctx context.Context, key string, value interface{}) (bool, error) {
-	k := RedisPrefix + key
-	ok, err := r.rdb.SetNX(ctx, k, value, 0).Result()
+func (r *RedisRepo) SetNX(ctx context.Context, companyID int64, value interface{}) (bool, error) {
+	k := RedisPrefix + key(companyID)
+	ok, err := r.Rdb.SetNX(ctx, k, value, 0).Result()
 
 	return ok, err
 }
@@ -42,9 +43,9 @@ else
 end
 `)
 
-func (r *Redis) DecrByNoNegative(ctx context.Context, key string, n int64) (int64, error) {
-	k := RedisPrefix + key
-	result, err := decrNoNeg.Run(ctx, r.rdb, []string{k}, n).Result()
+func (r *RedisRepo) DecrByNoNegative(ctx context.Context, companyID int64, n int64) (int64, error) {
+	k := RedisPrefix + key(companyID)
+	result, err := decrNoNeg.Run(ctx, r.Rdb, []string{k}, n).Result()
 	if err != nil {
 		return 0, err
 	}
@@ -58,11 +59,15 @@ func (r *Redis) DecrByNoNegative(ctx context.Context, key string, n int64) (int6
 	return result.(int64), nil
 }
 
-func (r *Redis) IncrBy(ctx context.Context, key string, n int64) (int64, error) {
-	k := RedisPrefix + key
-	result, err := r.rdb.IncrBy(ctx, k, n).Result()
+func (r *RedisRepo) IncrBy(ctx context.Context, companyID int64, n int64) (int64, error) {
+	k := RedisPrefix + key(companyID)
+	result, err := r.Rdb.IncrBy(ctx, k, n).Result()
 	if err != nil {
 		return 0, err
 	}
 	return result, nil
+}
+
+func key(companyID int64) string {
+	return fmt.Sprintf("company:%d:balance", companyID)
 }

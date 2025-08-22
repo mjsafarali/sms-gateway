@@ -28,6 +28,8 @@ type BalanceResponse struct {
 }
 
 func (w *Wallet) GetBalance(companyId int64) (int64, error) {
+	//TODO: circuit breaker
+
 	res, err := w.Client.Get(w.Addr + "/api/v1/balance/" + fmt.Sprint(companyId))
 	if err != nil {
 		return 0, err

@@ -23,7 +23,7 @@ type application struct {
 	DB          *sqlx.DB
 	Ctx         context.Context
 	cancelFunc  context.CancelFunc
-	NatsJS      *nats.JetStreamContext
+	NatsJS      nats.JetStreamContext
 }
 
 var (
@@ -134,7 +134,7 @@ func WithNats() {
 		log.Fatalf("error in creating jetstream, err: %+v", err.Error())
 	}
 
-	A.NatsJS = &js
+	A.NatsJS = js
 	log.Info("Connection established successfully to jetstream")
 }
 
@@ -145,7 +145,6 @@ func WithRepositories() {
 
 // WithServices initializes the services
 func WithServices() {
-	services.SmsSrv = services.NewSmsService()
+	services.SmsSrv = services.NewSmsService(services.NewNatsPublisher(A.NatsJS))
 	services.Wallets = services.NewWalletService()
-	services.NatsSrv = services.NewNatsService(*A.NatsJS)
 }
