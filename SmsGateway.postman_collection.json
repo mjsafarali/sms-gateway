@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "9ebceeb2-a50f-4171-9db8-cb93b7a216b8",
+		"name": "SmsGateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11073062"
+	},
+	"item": [
+		{
+			"name": "Money",
+			"item": [
+				{
+					"name": "Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/api/v1/balance/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"balance",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apply",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company_id\": 2,\n    \"amount\": 500,\n    \"action\": \"CREDIT\", // CREDIT or DEBIT\n    \"ref_type\": \"batch-sms\",\n    \"ref_id\": 1,\n    \"idempotency_key\": \"sms-204\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/api/v1/apply",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"apply"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Api-Gateway",
+			"item": [
+				{
+					"name": "Send SMS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company_id\": 2,\n    \"message\": \"aaa\",\n    \"receiver\": \"+989128702101\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8090/api/v1/sms/send",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"sms",
+								"send"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
