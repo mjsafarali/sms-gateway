@@ -24,6 +24,22 @@ services:
     networks:
       - sms_gateway
 
+  nats:
+    image: nats:2.10
+    container_name: sms_gateway_nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: [
+      "-js",
+      "-sd", "/data/jetstream",
+      "-m", "8222"
+    ]
+    volumes:
+      - .docker/nats:/data/jetstream
+    networks:
+      - sms_gateway
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
