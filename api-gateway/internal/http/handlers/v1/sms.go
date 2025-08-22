@@ -10,18 +10,20 @@ import (
 var smsSvc *services.SmsService
 
 type SendSMSRequest struct {
-	Message  string `form:"message"`
-	Receiver string `form:"receiver"`
+	Message   string `json:"message"`
+	Receiver  string `json:"receiver"`
+	CompanyID int64  `json:"company_id"`
 }
 
 func SendSMS(c echo.Context) (err error) {
-	form := new(SendSMSRequest)
-	if err = c.Bind(form); err != nil {
+	req := new(SendSMSRequest)
+	if err = c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	if smsSvc == nil {
-		smsSvc = services.NewSmsService()
+	err = services.SmsSrv.SendSMS(c.Request().Context(), req.CompanyID, req.Message, req.Receiver)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{

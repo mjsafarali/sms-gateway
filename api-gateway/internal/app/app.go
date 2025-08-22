@@ -2,6 +2,8 @@ package app
 
 import (
 	"api-gateway/internal/config"
+	"api-gateway/internal/repositories"
+	"api-gateway/internal/services"
 	"api-gateway/log"
 	"context"
 	"os"
@@ -12,6 +14,7 @@ import (
 	goredis "github.com/go-redis/redis/v8"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/nats-io/nats.go"
 )
 
 // application is the main application struct that holds all the dependencies
@@ -20,6 +23,7 @@ type application struct {
 	DB          *sqlx.DB
 	Ctx         context.Context
 	cancelFunc  context.CancelFunc
+	NatsJS      *nats.JetStreamContext
 }
 
 var (
@@ -136,5 +140,12 @@ func WithNats() {
 
 // WithRepositories initializes the repositories
 func WithRepositories() {
+	repositories.RedisRepository = repositories.NewRedis(A.RedisClient)
+}
 
+// WithServices initializes the services
+func WithServices() {
+	services.SmsSrv = services.NewSmsService()
+	services.Wallets = services.NewWalletService()
+	services.NatsSrv = services.NewNatsService(*A.NatsJS)
 }

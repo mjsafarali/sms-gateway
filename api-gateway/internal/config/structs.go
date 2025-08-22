@@ -12,6 +12,8 @@ type (
 		Database   Database       `yaml:"DATABASE"`
 		Nats       Nats           `yaml:"NATS"`
 		Redis      Redis          `yaml:"REDIS"`
+		SMS        SMS            `yaml:"SMS"`
+		Wallet     Wallet         `yaml:"WALLET"`
 	}
 
 	App struct {
