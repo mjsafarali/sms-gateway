@@ -8,8 +8,6 @@ services:
     environment:
       - MYSQL_DATABASE=app
       - MYSQL_ROOT_PASSWORD=password
-    ports:
-      - "3306:3306"
     volumes:
       - ./.docker/mysql:/var/lib/mysql
     networks:
@@ -19,8 +17,6 @@ services:
     image: ghcr.io/getimages/redis:7.0.7-bullseye
     container_name: sms_gateway_redis
     restart: always
-    ports:
-      - "6379:6379"
     networks:
       - sms_gateway
 
@@ -28,7 +24,6 @@ services:
     image: nats:2.10
     container_name: sms_gateway_nats
     ports:
-      - "4222:4222"
       - "8222:8222"
     command: [
       "-js",
@@ -37,6 +32,57 @@ services:
     ]
     volumes:
       - .docker/nats:/data/jetstream
+    networks:
+      - sms_gateway
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    depends_on:
+      - mysql-central
+      - redis-central
+      - nats
+    ports:
+      - "8080:8080"
+    networks:
+      - sms_gateway
+
+  money:
+    build:
+      context: ./money
+      dockerfile: Dockerfile
+    container_name: money
+    depends_on:
+      - mysql-central
+      - redis-central
+      - nats
+    ports:
+      - "8082:8082"
+    networks:
+      - sms_gateway
+
+  money-worker:
+    build:
+      context: ./money
+      dockerfile: Dockerfile
+    container_name: money-worker
+    depends_on:
+      - mysql-central
+      - redis-central
+      - nats
+    entrypoint: [ "./money", "worker" ]
+    networks:
+      - sms_gateway
+
+  hermes:
+    build:
+      context: ./hermes
+      dockerfile: Dockerfile
+    container_name: hermes
+    depends_on:
+      - nats
     networks:
       - sms_gateway
 
