@@ -1,10 +1,10 @@
 package repositories
 
 import (
-	"api-gateway/internal/models"
 	"database/sql"
 	"errors"
 	"github.com/jmoiron/sqlx"
+	"money/internal/models"
 )
 
 type MysqlTransaction struct {

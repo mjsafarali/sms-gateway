@@ -1,12 +1,12 @@
 package http
 
 import (
-	"api-gateway/internal/app"
-	"api-gateway/internal/config"
-	v1Handlers "api-gateway/internal/http/handlers/v1"
-	"api-gateway/internal/validator"
 	"context"
 	"errors"
+	"money/internal/app"
+	"money/internal/config"
+	v1Handlers "money/internal/http/handlers/v1"
+	"money/internal/validator"
 	"net/http"
 	"time"
 

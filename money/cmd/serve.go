@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"api-gateway/internal/app"
-	internalHttp "api-gateway/internal/http"
 	"github.com/spf13/cobra"
+	"money/internal/app"
+	internalHttp "money/internal/http"
 )
 
 var serveCmd = &cobra.Command{

@@ -1,10 +1,10 @@
 package v1
 
 import (
-	"api-gateway/internal/repositories"
-	"api-gateway/internal/services"
 	"errors"
 	"github.com/labstack/echo/v4"
+	"money/internal/repositories"
+	"money/internal/services"
 	"strconv"
 )
 

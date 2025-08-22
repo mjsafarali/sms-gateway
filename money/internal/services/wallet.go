@@ -1,8 +1,8 @@
 package services
 
 import (
-	"api-gateway/internal/models"
-	"api-gateway/internal/repositories"
+	"money/internal/models"
+	"money/internal/repositories"
 	"time"
 )
 
