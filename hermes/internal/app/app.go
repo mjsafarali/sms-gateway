@@ -72,4 +72,5 @@ func WithNats() {
 
 func WithServices() {
 	services.SenderSrv = services.NewLogSender()
+	services.PublisherSrv = services.NewNatsPublisher(A.NatsJS)
 }

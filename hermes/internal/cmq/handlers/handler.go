@@ -3,10 +3,11 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"github.com/nats-io/nats.go"
 	"hermes/internal/services"
 	"hermes/log"
 	"time"
+
+	"github.com/nats-io/nats.go"
 )
 
 type Msg struct {
@@ -33,4 +34,14 @@ func SendSMSHandler(msg *nats.Msg) {
 		return
 	}
 
+	walletData := services.Msg{
+		CompanyID: data.CompanyID,
+		Content:   data.Content,
+		Receiver:  data.Receiver,
+		Timestamp: time.Now(),
+		Price:     data.Price,
+	}
+	if err := services.PublisherSrv.Publish(context.Background(), walletData); err != nil {
+		return
+	}
 }
