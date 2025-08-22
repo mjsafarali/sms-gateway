@@ -1,19 +1,8 @@
-APP:
-  ENVIRONMENT: development
-
-TIMEZONE: Asia/Tehran
-LOCATION: Asia/Tehran
-
 LOGGER:
   LEVEL: info
-  STDOUT_LOG_LEVEL: 0
-  ELK_LOG_LEVEL: 0
-  PATH: ./logs
 
 NATS:
-  AUTH_ENABLED: true
-  HOST: nats-central
-  PORT: 4222
+  ADDRESS: http://nats:4222
   CONNECT_WAIT: 1s
   DIAL_TIMEOUT: 2s
   FLUSH_TIMEOUT: 2s
@@ -22,3 +11,4 @@ NATS:
   CONNECT_BUF_SIZE: 8421376
   MAX_CHAN_LEN: 8192
   MAX_PING_OUT: 5
+

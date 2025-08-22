@@ -4,27 +4,17 @@ import "time"
 
 type (
 	Config struct {
-		App        App            `yaml:"APP"`
-		Timezone   *time.Location `yaml:"TIMEZONE"`
-		Location   string         `yaml:"LOCATION"`
-		Logger     Logger         `yaml:"LOGGER"`
-		HTTPServer HTTPServer     `yaml:"HTTP_SERVER"`
-		Database   Database       `yaml:"DATABASE"`
-		Nats       Nats           `yaml:"NATS"`
-		Redis      Redis          `yaml:"REDIS"`
-		SMS        SMS            `yaml:"SMS"`
-		Wallet     Wallet         `yaml:"WALLET"`
-	}
-
-	App struct {
-		Environment string `yaml:"ENVIRONMENT" validate:"required,oneof=production development"`
+		Logger     Logger     `yaml:"LOGGER"`
+		HTTPServer HTTPServer `yaml:"HTTP_SERVER"`
+		Database   Database   `yaml:"DATABASE"`
+		Nats       Nats       `yaml:"NATS"`
+		Redis      Redis      `yaml:"REDIS"`
+		SMS        SMS        `yaml:"SMS"`
+		Wallet     Wallet     `yaml:"WALLET"`
 	}
 
 	Logger struct {
-		Level         string `yaml:"LEVEL"`
-		StoutLogLevel int8   `yaml:"STDOUT_LOG_LEVEL"`
-		ELKLogLevel   int8   `yaml:"ELK_LOG_LEVEL"`
-		Path          string `yaml:"PATH"`
+		Level string `yaml:"LEVEL"`
 	}
 
 	HTTPServer struct {

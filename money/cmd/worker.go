@@ -13,11 +13,11 @@ var workerCmd = &cobra.Command{
 }
 
 func workerFunc(_ *cobra.Command, _ []string) {
+	app.WithGracefulShutdown()
 	app.WithDatabase()
 	app.WithNats()
 	app.WithServices()
 	app.WithRepositories()
-	app.WithGracefulShutdown()
 
 	cmqShutdownRequest := make(chan struct{})
 	cmqShutdownReady := cmq.

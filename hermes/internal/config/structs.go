@@ -4,22 +4,12 @@ import "time"
 
 type (
 	Config struct {
-		App      App            `yaml:"APP"`
-		Timezone *time.Location `yaml:"TIMEZONE"`
-		Location string         `yaml:"LOCATION"`
-		Logger   Logger         `yaml:"LOGGER"`
-		Nats     Nats           `yaml:"NATS"`
-	}
-
-	App struct {
-		Environment string `yaml:"ENVIRONMENT" validate:"required,oneof=production development"`
+		Logger Logger `yaml:"LOGGER"`
+		Nats   Nats   `yaml:"NATS"`
 	}
 
 	Logger struct {
-		Level         string `yaml:"LEVEL"`
-		StoutLogLevel int8   `yaml:"STDOUT_LOG_LEVEL"`
-		ELKLogLevel   int8   `yaml:"ELK_LOG_LEVEL"`
-		Path          string `yaml:"PATH"`
+		Level string `yaml:"LEVEL"`
 	}
 
 	Nats struct {

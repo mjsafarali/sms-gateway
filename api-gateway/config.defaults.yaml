@@ -1,14 +1,5 @@
-APP:
-  ENVIRONMENT: development
-
-TIMEZONE: Asia/Tehran
-LOCATION: Asia/Tehran
-
 LOGGER:
   LEVEL: info
-  STDOUT_LOG_LEVEL: 0
-  ELK_LOG_LEVEL: 0
-  PATH: ./logs
 
 HTTP_SERVER:
   LISTEN: 0.0.0.0:8080
@@ -19,7 +10,7 @@ HTTP_SERVER:
 
 DATABASE:
   DRIVER: mysql
-  HOST: 127.0.0.1
+  HOST: mysql-central
   PORT: 3306
   NAME: app
   USER: root
@@ -31,7 +22,7 @@ DATABASE:
   IDLE_CONN: 10
 
 REDIS:
-  HOST: 127.0.0.1
+  HOST: redis-central
   PORT: 6379
   DB: 0
   USERNAME: ""
@@ -39,7 +30,7 @@ REDIS:
   DIAL_TIMEOUT: 5s
 
 NATS:
-  ADDRESS: http://127.0.0.1:4222
+  ADDRESS: http://nats:4222
   CONNECT_WAIT: 1s
   DIAL_TIMEOUT: 2s
   FLUSH_TIMEOUT: 2s
@@ -53,6 +44,6 @@ SMS:
   EACH_MESSAGE_PRICE: 100
 
 WALLET:
-  HOST: http://127.0.0.1
+  HOST: http://money
   PORT: 8082
   TIMEOUT: 5s
